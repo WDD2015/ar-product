@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>防水产品AR展示</title>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ar.js@2.3.0/aframe/build/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ar.js@2.3.0/aframe/aframe-ar-nft.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-extras@6.1.1/dist/aframe-extras.loaders.min.js"></script>
+    <style>
+        #product-info {position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:white;padding:15px;border-radius:8px;box-shadow:0 0 10px rgba(0,0,0,0.3);display:none;z-index:1000;max-width:80%;}
+        #close-btn {position:absolute;top:5px;right:10px;cursor:pointer;font-weight:bold;}
+        .info-btn {position:fixed;top:20px;right:20px;background:#007bff;color:white;border:none;padding:10px 15px;border-radius:5px;cursor:pointer;z-index:999;}
+    </style>
+</head>
+<body>
+    <a-scene vr-mode-ui="enabled: false" arjs="trackingMethod: best; sourceType: webcam; detectionMode: mono_and_matrix; matrixCodeType: 3x3;">
+        <a-marker type="barcode" value="1">
+            <a-entity gltf-model="#product-model" scale="0.5 0.5 0.5" position="0 0 0" rotation="0 0 0" id="product-3d"></a-entity>
+        </a-marker>
+        <a-assets>
+            <!-- https://waterproof-st-123.oss-cn-chengdu.aliyuncs.com/21%E9%9A%A7%E9%81%93%E9%98%B2%E6%B0%B4%E7%B3%BB%E7%BB%9F%EF%BC%88%E4%BA%8C%EF%BC%89.glb -->
+            <a-asset-item id="product-model" src="https://xxx.oss-cn-hangzhou.aliyuncs.com/防水卷材.glb"></a-asset-item>
+        </a-assets>
+        <a-entity camera></a-entity>
+        <a-light type="ambient" intensity="1"></a-light>
+        <a-light type="directional" position="0 1 0" intensity="0.8"></a-light>
+    </a-scene>
+
+    <button class="info-btn" onclick="showProductInfo()">查看产品信息</button>
+    <div id="product-info">
+        <span id="close-btn" onclick="hideProductInfo()">×</span>
+        <h3>防水构造详情</h3>
+        <p>产品名称：隧道防水系统</p>
+        <p>防水等级：IP68</p>
+        <p>适用场景：盾构隧道</p>
+        <p>特性：耐腐蚀、使用寿命长</p>
+        <p>规格：可定制</p>
+    </div>
+
+    <script>
+        function showProductInfo() {document.getElementById('product-info').style.display = 'block';}
+        function hideProductInfo() {document.getElementById('product-info').style.display = 'none';}
+        document.querySelector('#product-3d').addEventListener('model-loaded', function() {console.log('模型加载完成');});
+        document.addEventListener('DOMContentLoaded', function() {
+            navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {stream.getTracks().forEach(track => track.stop());}).catch(function(err) {alert('请允许摄像头权限：' + err);});
+        });
+    </script>
+</body>
+</html>
